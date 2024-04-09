@@ -29,6 +29,8 @@ resource "aws_security_group" "km_rds_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  # Drata: Ensure that [aws_security_group.ingress.cidr_blocks] is explicitly defined and narrowly scoped to only allow traffic from trusted sources
+  # Drata: Ensure that [aws_security_group.egress.cidr_blocks] is explicitly defined and narrowly scoped to only allow traffic to trusted sources
   }
 }
 
@@ -116,6 +118,6 @@ resource "aws_s3_bucket" "km_public_blob" {
 resource "aws_s3_bucket_public_access_block" "km_public_blob" {
   bucket = aws_s3_bucket.km_public_blob.id
 
-  block_public_acls   = false
-  block_public_policy = false
+  block_public_acls   = true
+  block_public_policy = true
 }

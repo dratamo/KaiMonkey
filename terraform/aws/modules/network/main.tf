@@ -44,7 +44,7 @@ resource "aws_subnet" "km_public_subnet" {
   cidr_block              = cidrsubnet(aws_vpc.km_vpc.cidr_block, 8, var.az_count + count.index)
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   vpc_id                  = aws_vpc.km_vpc.id
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = merge(var.default_tags, {
     Name = "km_public_subnet_${var.environment}"
@@ -146,6 +146,7 @@ resource "aws_security_group" "km_ecs_sg" {
     from_port   = 0
     to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
+  # Drata: Ensure that [aws_security_group.egress.cidr_blocks] is explicitly defined and narrowly scoped to only allow traffic to trusted sources
   }
 
   tags = merge(var.default_tags, {
